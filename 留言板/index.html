@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<link rel="stylesheet" href="css/bootstrap.min.css">
+</head>
+<body>
+	<div id="box">
+		<form action="" onSubmit="return false">
+			<label for="username">用户名:</label>
+			<input type="text" id="username" v-model="username">
+			<label for="age">年  龄:</label>
+			<input type="text" id="age" v-model="age">
+			<input v-on:click="add" type="submit" value="添加">
+		</form>
+		<table class="table">
+			<caption>用户信息表</caption>
+			<thead>
+				<tr>
+					<th>序号</th>
+					<th>姓名</th>
+					<th>年龄</th>
+				</tr>
+			</thead>
+			<tbody>
+			<!-- 全部数据 -->
+				<tr v-for="val in data">
+					<td>{{$index+1}}</td>
+					<td>{{val.name}}</td>
+					<td>{{val.age}}</td>
+					<td><button v-on:click="remove($index)">删除</button></td>
+				</tr>
+				<tr v-if="data.length">
+					<td><button v-on:click="remove(-1)">删除全部数据</button></td>
+				</tr>
+				<tr v-if="data.length==0">
+					<td><h2>暂无数据</h2></td>
+				</tr>
+
+			
+			
+		</table>
+	</div>
+	
+	<script src="script/vue.js"></script>
+	<script>
+				new Vue({
+					el:'#box',
+					data:{
+						data:[],
+						username:"",
+						age:""
+					},
+					methods:{
+						add:function(){
+							this.data.push({name:this.username,
+							age:this.age});
+							this.username="";
+							this.age=""
+							
+						},
+						remove:function(index){
+							if(index==-1){
+								this.data=[];
+							}else{
+								this.data.splice(index,1);
+							}
+						}
+					}
+				})
+	</script>
+</body>
+</html>

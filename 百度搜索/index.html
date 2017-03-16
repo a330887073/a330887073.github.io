@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style type="text/css">
+		.checked{
+			background-color: blue;
+		}
+	</style>
+</head>
+<body>
+	<div id="box">
+		<input type="text" v-model="t1" @keyup="get($event)" @keydown.up.prevent="up()" @keydown.down.prevent="down()">
+		<ul>
+			<li v-for="(myData,index) in myDatas" :class="{checked:index==now}">{{myData}}</li>
+		</ul>
+		<p v-if="myDatas.length===0">暂无数据</p>
+	</div>
+
+	<script src="script/vue.js"></script>
+	<script src="script/vue-resource.js"></script>
+	<script>
+		new Vue({
+			el:'#box',
+			data:{
+				t1:'',
+				myDatas:[],
+				now:-1
+			},
+			methods:{
+				get:function(ev){
+					if(ev.keyCode==38 || ev.keyCode==40)return;
+					if(ev.keyCode==13){
+                            window.open('https://www.baidu.com/s?wd='+this.t1);
+                            this.t1='';
+                        }
+					this.$http.jsonp("http://searchtip.kugou.com/getSearchTip",
+					{
+						params:{keyword:this.t1},
+						jsonp:"callback"
+					}).then(function(res){
+						
+						this.myDatas=[];
+						if(this.t1!=""){
+							var arr=JSON.parse(res.bodyText).data[0].RecordDatas;
+						
+						for(var i=0;i<arr.length;i++){
+							this.myDatas.push(arr[i].HintInfo)
+						}
+					}
+						
+					},function(){
+						
+					})
+				},
+				up:function(){
+					this.now--;
+					if(this.now==-2)this.now=this.myDatas.length-1;
+					this.t1=this.myDatas[this.now];
+				},
+				down:function(){
+					this.now++;
+					if(this.now==this.myDatas.length)this.now=-1;
+					this.t1=this.myDatas[this.now];
+				}
+			}
+		})
+	</script>
+</body>
+</html>

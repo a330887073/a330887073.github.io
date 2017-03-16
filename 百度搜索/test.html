@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>智能社——http://www.zhinengshe.com</title>
+   
+    <style>
+        .gray{
+            background: #ccc;
+        }
+    </style>
+    <script src="http://code.jquery.com/jquery.min.js"></script>
+    <script src="script/vue.js"></script>
+    <script src="script/vue-resource.js"></script>
+    <script>
+        window.onload=function(){
+            new Vue({
+                el:'#box',
+                data:{
+                    myData:[],
+                    t1:'',
+                    now:-1
+                },
+                methods:{
+                    get:function(){
+                    
+                        this.$http.jsonp('https://sug.so.360.cn/suggest',{//请求参数
+        params: {
+          word:'a'
+        },
+        jsonp:'callback'
+      }
+                        ).then(function(res){
+                            
+                            console.log(res.data)
+                        },function(){
+                            
+                        });
+                    },
+                    changeDown:function(){
+                        this.now++;
+                        if(this.now==this.myData.length)this.now=-1;
+                        this.t1=this.myData[this.now];
+                    },
+                    changeUp:function(){
+                        this.now--;
+                        if(this.now==-2)this.now=this.myData.length-1;
+                        this.t1=this.myData[this.now];
+                    }
+                }
+            });
+        };
+    </script>
+</head>
+<body>
+    <div id="box">
+        <input type="text" v-model="t1" @keyup="get($event)" @keydown.down="changeDown()" @keydown.up.prevent="changeUp()">
+        <ul>
+            <li v-for="value in myData" :class="{gray:$index==now}">
+                {{value}}
+            </li>
+        </ul>
+        <p v-show="myData.length==0">暂无数据...</p>
+    </div>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
