@@ -14,7 +14,7 @@
     <script>
         if (navigator.geolocation) {
             var n = navigator.geolocation.getCurrentPosition(function (res) {
-               $("#location").text(res); // 需要的坐标地址就在res中
+               $("#location").text(JSON.stringify(res)); // 需要的坐标地址就在res中
             });
         } else {
             alert('该浏览器不支持定位');
