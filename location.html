@@ -1,0 +1,11 @@
+<script>
+if (navigator.geolocation){
+          navigator.geolocation.getCurrentPosition(
+              function (position) {
+                 latitude = position.coords.latitude;//获取纬度
+                 longitude = position.coords.longitude;//获取经度
+              });
+      }else{
+         alert("不支持定位功能");
+      }
+</script>
